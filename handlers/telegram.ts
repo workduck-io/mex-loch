@@ -11,7 +11,11 @@ const bot = new Telegraf(token, {
   telegram: { webhookReply: false }
 })
 
-bot.start(async (ctx) => ctx.reply(`${ctx.chat.id} Bot started. Please open: mex://localhost:3333/settings`))
+bot.start(async (ctx) =>
+  ctx.reply(
+    `Bot started. Please open: Bot started. Please open: https://mexit.workduck.io/integration/?serviceId=${ctx.chat.id}`
+  )
+)
 
 bot.on('message', async (ctx) => {
   //@ts-ignore
