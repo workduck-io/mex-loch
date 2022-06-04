@@ -109,8 +109,19 @@ const serverlessConfig: Partial<Serverless> = {
       events: [
         {
           httpApi: {
-            path: '/register',
+            path: '/connect',
             method: 'POST'
+          }
+        }
+      ]
+    },
+    connected: {
+      handler: 'handlers/register.connected',
+      events: [
+        {
+          httpApi: {
+            path: '/connect/{workspaceId}',
+            method: 'GET'
           }
         }
       ]

@@ -1,5 +1,5 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda'
-import { registerUser } from '../src/db/register'
+import { getConnectedServices, registerUser } from '../src/db/register'
 export async function handler(event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> {
   const body = JSON.parse(event.body)
   try {
@@ -10,8 +10,24 @@ export async function handler(event: APIGatewayProxyEventV2): Promise<APIGateway
   } catch (err) {
     console.error(err)
     return {
-      statusCode: 500,
-      body: JSON.stringify(err)
+      statusCode: 400,
+      body: 'This user is already registered'
+    }
+  }
+}
+
+export async function connected(event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> {
+  try {
+    const services = await getConnectedServices(event.pathParameters.workspaceId)
+    return {
+      statusCode: 200,
+      body: JSON.stringify(services)
+    }
+  } catch (err) {
+    console.error(err)
+    return {
+      statusCode: 400,
+      body: 'Workspace not available'
     }
   }
 }

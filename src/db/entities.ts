@@ -8,9 +8,10 @@ export const messageEntity = new Entity<LastMessage>({
   timestamps: false,
   attributes: {
     serviceId: { partitionKey: true },
-    serviceType: { type: 'string', required: 'always' },
+    serviceType: { map: 'ak', type: 'string', required: 'always' },
     mexId: { type: 'string' },
     nodeId: { type: 'string', default: () => `NODE_${nanoid()}` },
+    parentNodeId: { type: 'string' },
     sessionStartTime: { type: 'number' }
   },
   table: lochTable

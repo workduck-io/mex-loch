@@ -33,6 +33,7 @@ export class LastMessageDAO {
       lambdaCreateTemplate({
         mexId: attributes.mexId,
         nodeId: newNodeId,
+        parentNodeId: attributes.parentNodeId,
         message: message,
         idToken: (await getCreds()).idToken
       })

@@ -7,6 +7,10 @@ export default {
         {
           AttributeName: 'pk',
           AttributeType: 'S'
+        },
+        {
+          AttributeName: 'ak',
+          AttributeType: 'S'
         }
       ],
       KeySchema: [
@@ -18,7 +22,25 @@ export default {
       ProvisionedThroughput: {
         ReadCapacityUnits: '15',
         WriteCapacityUnits: '15'
-      }
+      },
+      GlobalSecondaryIndexes: [
+        {
+          IndexName: 'ak-index',
+          KeySchema: [
+            {
+              AttributeName: 'ak',
+              KeyType: 'HASH'
+            }
+          ],
+          Projection: {
+            ProjectionType: 'ALL'
+          },
+          ProvisionedThroughput: {
+            ReadCapacityUnits: '5',
+            WriteCapacityUnits: '5'
+          }
+        }
+      ]
     }
   }
 }
