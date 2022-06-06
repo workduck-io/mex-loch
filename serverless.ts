@@ -79,6 +79,20 @@ const serverlessConfig: Partial<Serverless> = {
           }
         ]
       }
+    },
+    httpApi: {
+      cors: true,
+      //@ts-ignore
+      // disableDefaultEndpoint: true,
+      authorizers: {
+        workduckAuthorizer: {
+          identitySource: '$request.header.Authorization',
+          issuerUrl:
+            'https://cognito-idp.' + '${opt:region, self:provider.region}' + '.amazonaws.com/' + 'us-east-1_Zu7FAh7hj',
+
+          audience: ['6pvqt64p0l2kqkk2qafgdh13qe']
+        }
+      }
     }
   },
   functions: {
@@ -110,7 +124,9 @@ const serverlessConfig: Partial<Serverless> = {
         {
           httpApi: {
             path: '/connect',
-            method: 'POST'
+            method: 'POST',
+            //@ts-ignore
+            authorizer: 'workduckAuthorizer'
           }
         }
       ]
@@ -121,7 +137,9 @@ const serverlessConfig: Partial<Serverless> = {
         {
           httpApi: {
             path: '/connect',
-            method: 'GET'
+            method: 'GET',
+            //@ts-ignore
+            authorizer: 'workduckAuthorizer'
           }
         }
       ]
