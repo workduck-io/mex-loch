@@ -120,7 +120,7 @@ const serverlessConfig: Partial<Serverless> = {
       events: [
         {
           httpApi: {
-            path: '/connect/{workspaceId}',
+            path: '/connect',
             method: 'GET'
           }
         }

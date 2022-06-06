@@ -1,5 +1,6 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda'
 import { getConnectedServices, registerUser } from '../src/db/register'
+import { getWorkspaceId } from '../src/libs/utils'
 export async function handler(event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> {
   const body = JSON.parse(event.body)
   try {
@@ -18,7 +19,8 @@ export async function handler(event: APIGatewayProxyEventV2): Promise<APIGateway
 
 export async function connected(event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> {
   try {
-    const services = await getConnectedServices(event.pathParameters.workspaceId)
+    const workspaceId = getWorkspaceId(event)
+    const services = await getConnectedServices(workspaceId)
     return {
       statusCode: 200,
       body: JSON.stringify(services)

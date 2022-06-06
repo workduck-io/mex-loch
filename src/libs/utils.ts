@@ -1,3 +1,4 @@
+import { APIGatewayProxyEventV2 } from 'aws-lambda'
 import { nanoid } from 'nanoid'
 
 const NODE_PATH_SPACER = ' '
@@ -96,4 +97,8 @@ export const lambdaCreateTemplate = (config: {
     },
     InvocationType: 'Event'
   }
+}
+
+export function getWorkspaceId(event: APIGatewayProxyEventV2): string {
+  return event.headers['mex-workspace-id']
 }
