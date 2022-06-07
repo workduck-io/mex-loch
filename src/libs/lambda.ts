@@ -12,7 +12,6 @@ interface ProxyLambdaIvokeRequest extends LambdaClient.InvocationRequest {
 
 export default {
   invokeMexNode: (params: ProxyLambdaIvokeRequest) => {
-    console.log(params)
     return mexNodeLambda.invoke({ ...params, Payload: JSON.stringify(params.Payload) }).promise()
   }
 }

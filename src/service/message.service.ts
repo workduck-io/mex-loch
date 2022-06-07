@@ -18,14 +18,14 @@ class MessageService {
           },
           message
         )
-        console.log(`New node created: ${node.nodeId} , ${message}`)
+        console.log(`New node created: ${node.nodeId}`)
         return 'New Note Created'
       } catch (err) {
         console.error(err)
         return 'Problem creating new note. Please try again!'
       }
     } else {
-      console.log(`Send message ${message} to server with the current node`, lastMessage.getMexId())
+      console.log(`Append : `, lastMessage.getMexId())
       try {
         await lastMessage.appendToNode(
           {
