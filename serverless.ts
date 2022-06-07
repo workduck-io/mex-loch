@@ -2,7 +2,7 @@ import { Serverless } from 'serverless/aws'
 import Table from './infra/table'
 
 const serverlessConfig: Partial<Serverless> = {
-  service: 'telegram-bot-test',
+  service: 'mex-loch',
   frameworkVersion: '3',
   package: {
     individually: true,
@@ -12,12 +12,17 @@ const serverlessConfig: Partial<Serverless> = {
     'serverless-offline': {
       noPrependStageInUrl: true
     },
+    enabled: {
+      dev: true,
+      test: true,
+      other: false
+    },
     stage: '${opt:stage, self:provider.stage}',
     esbuild: {
       packager: 'yarn'
     },
     dynamodb: {
-      stages: ['local', 'test'],
+      stages: ['local'],
       dbPath: '/dbMocks',
       start: {
         port: 8000,
@@ -25,6 +30,17 @@ const serverlessConfig: Partial<Serverless> = {
         noStart: true
       }
     },
+    customDomain: {
+      http: {
+        domainName: 'http-${opt:stage, self:provider.stage}.workduck.io',
+        basePath: 'loch',
+        createRoute53Record: true,
+        endpointType: 'regional',
+        enabled: '${self:custom.enabled.${opt:stage, self:provider.stage}, self:custom.enabled.other}',
+        apiType: 'http'
+      }
+    },
+
     prune: {
       automatic: true,
       number: 3
@@ -35,11 +51,14 @@ const serverlessConfig: Partial<Serverless> = {
     'serverless-dynamodb-local',
     'serverless-offline',
     'serverless-dotenv-plugin',
+    'serverless-domain-manager',
     'serverless-prune-plugin'
   ],
   provider: {
     name: 'aws',
     runtime: 'nodejs12.x',
+    memorySize: 512,
+    logRetentionInDays: 7,
     stage: 'dev',
     region: 'us-east-1',
     environment: {
@@ -79,6 +98,20 @@ const serverlessConfig: Partial<Serverless> = {
           }
         ]
       }
+    },
+    httpApi: {
+      cors: true,
+      //@ts-ignore
+      // disableDefaultEndpoint: true,
+      authorizers: {
+        workduckAuthorizer: {
+          identitySource: '$request.header.Authorization',
+          issuerUrl:
+            'https://cognito-idp.' + '${opt:region, self:provider.region}' + '.amazonaws.com/' + 'us-east-1_Zu7FAh7hj',
+
+          audience: ['6pvqt64p0l2kqkk2qafgdh13qe']
+        }
+      }
     }
   },
   functions: {
@@ -109,8 +142,49 @@ const serverlessConfig: Partial<Serverless> = {
       events: [
         {
           httpApi: {
-            path: '/register',
-            method: 'POST'
+            path: '/connect',
+            method: 'POST',
+            //@ts-ignore
+            authorizer: 'workduckAuthorizer'
+          }
+        }
+      ]
+    },
+    update: {
+      handler: 'handlers/register.update',
+      events: [
+        {
+          httpApi: {
+            path: '/connect',
+            method: 'PUT',
+            //@ts-ignore
+            authorizer: 'workduckAuthorizer'
+          }
+        }
+      ]
+    },
+    connected: {
+      handler: 'handlers/register.connected',
+      events: [
+        {
+          httpApi: {
+            path: '/connect',
+            method: 'GET',
+            //@ts-ignore
+            authorizer: 'workduckAuthorizer'
+          }
+        }
+      ]
+    },
+    allConfig: {
+      handler: 'handlers/register.allConfig',
+      events: [
+        {
+          httpApi: {
+            path: '/connect/all',
+            method: 'GET',
+            //@ts-ignore
+            authorizer: 'workduckAuthorizer'
           }
         }
       ]

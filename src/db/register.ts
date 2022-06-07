@@ -3,18 +3,35 @@ import { messageEntity } from './entities'
 import { LastMessage } from './interface'
 
 export const registerUser = async (payload: Partial<LastMessage>) => {
-  try {
-    return (
-      (await messageEntity.put(payload, {
-        conditions: [
-          {
-            attr: 'serviceId',
-            exists: false
-          }
-        ]
-      })) as DocumentClient.UpdateItemOutput
-    ).Attributes
-  } catch (err) {
-    throw err
-  }
+  return (
+    (await messageEntity.put(payload, {
+      conditions: [
+        {
+          attr: 'serviceId',
+          exists: false
+        }
+      ]
+    })) as DocumentClient.UpdateItemOutput
+  ).Attributes
+}
+
+export const updateUser = async (payload: Partial<LastMessage>) => {
+  return (
+    (await messageEntity.put(payload, {
+      conditions: [
+        {
+          attr: 'serviceId',
+          exists: true
+        }
+      ]
+    })) as DocumentClient.UpdateItemOutput
+  ).Attributes
+}
+
+export const getConnectedServices = async (workspaceId: string) => {
+  return (
+    (await messageEntity.query(workspaceId, {
+      index: 'ak-index'
+    })) as DocumentClient.QueryOutput
+  ).Items
 }

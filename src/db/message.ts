@@ -33,6 +33,7 @@ export class LastMessageDAO {
       lambdaCreateTemplate({
         mexId: attributes.mexId,
         nodeId: newNodeId,
+        parentNodeId: attributes.parentNodeId,
         message: message,
         idToken: (await getCreds()).idToken
       })
@@ -83,6 +84,13 @@ export class LastMessageDAO {
     // // Get last record
     if (Object.keys(this.record).length > 0) {
       return this.record.nodeId
+    }
+  }
+
+  getParentNodeId() {
+    // // Get last record
+    if (Object.keys(this.record).length > 0) {
+      return this.record.parentNodeId
     }
   }
 }

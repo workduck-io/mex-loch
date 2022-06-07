@@ -1,10 +1,11 @@
+import { APIGatewayProxyEventV2 } from 'aws-lambda'
 import { nanoid } from 'nanoid'
 
-export const NODE_PATH_SPACER = ' '
-export const NODE_PATH_WORD_LENGTH = 5
-export const NODE_PATH_CHAR_LENGTH = 40
+const NODE_PATH_SPACER = ' '
+const NODE_PATH_WORD_LENGTH = 5
+const NODE_PATH_CHAR_LENGTH = 40
 
-export const getSlug = (text: string, charLength = NODE_PATH_CHAR_LENGTH, wordLength = NODE_PATH_WORD_LENGTH) =>
+const getSlug = (text: string, charLength = NODE_PATH_CHAR_LENGTH, wordLength = NODE_PATH_WORD_LENGTH) =>
   // trims leading and trailing spacers
   text
     .trim()
@@ -55,8 +56,14 @@ export const lambdaAppendTemplate = (config: { nodeId: string; mexId: string; me
   }
 }
 
-export const lambdaCreateTemplate = (config: { nodeId: string; mexId: string; message: string; idToken: string }) => {
-  const { nodeId, mexId, message, idToken } = config
+export const lambdaCreateTemplate = (config: {
+  nodeId: string
+  parentNodeId: string
+  mexId: string
+  message: string
+  idToken: string
+}) => {
+  const { nodeId, mexId, message, idToken, parentNodeId } = config
   return {
     FunctionName: `mex-backend-${process.env.SLS_STAGE ?? 'local'}-Node`,
     Payload: {
@@ -76,6 +83,7 @@ export const lambdaCreateTemplate = (config: { nodeId: string; mexId: string; me
         type: 'NodeRequest',
         title: getSlug(message),
         id: nodeId,
+        referenceID: parentNodeId,
         data: [
           {
             id: `TEMP_${nanoid()}`,
@@ -89,4 +97,8 @@ export const lambdaCreateTemplate = (config: { nodeId: string; mexId: string; me
     },
     InvocationType: 'Event'
   }
+}
+
+export function getWorkspaceId(event: APIGatewayProxyEventV2): string {
+  return event.headers['mex-workspace-id']
 }
