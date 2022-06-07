@@ -12,12 +12,17 @@ const serverlessConfig: Partial<Serverless> = {
     'serverless-offline': {
       noPrependStageInUrl: true
     },
+    enabled: {
+      dev: true,
+      test: true,
+      other: false
+    },
     stage: '${opt:stage, self:provider.stage}',
     esbuild: {
       packager: 'yarn'
     },
     dynamodb: {
-      stages: ['local', 'test'],
+      stages: ['local'],
       dbPath: '/dbMocks',
       start: {
         port: 8000,
