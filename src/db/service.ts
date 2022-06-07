@@ -36,20 +36,11 @@ export const lochTable = new Table({
 
   // Define partition and sort keys
   partitionKey: 'pk',
-  // indexes: {
-  //   'ak-sk-index': {
-  //     partitionKey: 'ak',
-  //     sortKey: 'sk',
-  //   },
-  //   'reverse-index': {
-  //     partitionKey: 'sk',
-  //     sortKey: 'ak',
-  //   },
-  //   'pk-_et-index': {
-  //     partitionKey: 'pk',
-  //     sortKey: '_et',
-  //   },
-  // },
+  indexes: {
+    'ak-index': {
+      partitionKey: 'ak'
+    }
+  },
 
   // Add the DocumentClient
   DocumentClient

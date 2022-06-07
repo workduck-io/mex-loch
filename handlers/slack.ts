@@ -31,7 +31,7 @@ app.command('/start', async ({ payload, command, ack, respond }) => {
 
   if (command.channel_type !== 'im') respond('This command can only be used in a direct message')
 
-  respond(`Bot started. Please open: https://mexit.workduck.io/integration/?serviceId=${payload.channel_id}`)
+  respond(`Bot started. Please open: mex://navigate/integrations/portal/SLACK?serviceId=${payload.channel_id}`)
 })
 
 export const handler = async (event, context, callback) => {

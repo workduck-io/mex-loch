@@ -86,4 +86,11 @@ export class LastMessageDAO {
       return this.record.nodeId
     }
   }
+
+  getParentNodeId() {
+    // // Get last record
+    if (Object.keys(this.record).length > 0) {
+      return this.record.parentNodeId
+    }
+  }
 }

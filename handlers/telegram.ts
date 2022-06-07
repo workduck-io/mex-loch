@@ -13,7 +13,7 @@ const bot = new Telegraf(token, {
 
 bot.start(async (ctx) =>
   ctx.reply(
-    `Bot started. Please open: Bot started. Please open: https://mexit.workduck.io/integration/?serviceId=${ctx.chat.id}`
+    `Bot started. Please open: Bot started. Please open: mex://navigate/integrations/portal/TELEGRAM?serviceId=${ctx.chat.id}`
   )
 )
 

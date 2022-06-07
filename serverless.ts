@@ -2,7 +2,7 @@ import { Serverless } from 'serverless/aws'
 import Table from './infra/table'
 
 const serverlessConfig: Partial<Serverless> = {
-  service: 'telegram-bot-test',
+  service: 'mex-loch',
   frameworkVersion: '3',
   package: {
     individually: true,
@@ -25,6 +25,17 @@ const serverlessConfig: Partial<Serverless> = {
         noStart: true
       }
     },
+    customDomain: {
+      http: {
+        domainName: 'http-${opt:stage, self:provider.stage}.workduck.io',
+        basePath: 'loch',
+        createRoute53Record: true,
+        endpointType: 'regional',
+        enabled: '${self:custom.enabled.${opt:stage, self:provider.stage}, self:custom.enabled.other}',
+        apiType: 'http'
+      }
+    },
+
     prune: {
       automatic: true,
       number: 3
@@ -35,11 +46,14 @@ const serverlessConfig: Partial<Serverless> = {
     'serverless-dynamodb-local',
     'serverless-offline',
     'serverless-dotenv-plugin',
+    'serverless-domain-manager',
     'serverless-prune-plugin'
   ],
   provider: {
     name: 'aws',
     runtime: 'nodejs12.x',
+    memorySize: 512,
+    logRetentionInDays: 7,
     stage: 'dev',
     region: 'us-east-1',
     environment: {
@@ -131,12 +145,38 @@ const serverlessConfig: Partial<Serverless> = {
         }
       ]
     },
+    update: {
+      handler: 'handlers/register.update',
+      events: [
+        {
+          httpApi: {
+            path: '/connect',
+            method: 'PUT',
+            //@ts-ignore
+            authorizer: 'workduckAuthorizer'
+          }
+        }
+      ]
+    },
     connected: {
       handler: 'handlers/register.connected',
       events: [
         {
           httpApi: {
             path: '/connect',
+            method: 'GET',
+            //@ts-ignore
+            authorizer: 'workduckAuthorizer'
+          }
+        }
+      ]
+    },
+    allConfig: {
+      handler: 'handlers/register.allConfig',
+      events: [
+        {
+          httpApi: {
+            path: '/connect/all',
             method: 'GET',
             //@ts-ignore
             authorizer: 'workduckAuthorizer'

@@ -12,6 +12,7 @@ class MessageService {
           {
             serviceId,
             serviceType,
+            parentNodeId: lastMessage.getParentNodeId(),
             mexId: lastMessage.getMexId(),
             sessionStartTime: Date.now()
           },
