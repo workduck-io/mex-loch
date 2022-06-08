@@ -8,14 +8,18 @@ if (token === undefined) {
 }
 
 const bot = new Telegraf(token, {
-  telegram: { webhookReply: false }
+  telegram: { webhookReply: true }
 })
 
-bot.start(async (ctx) =>
-  ctx.reply(
-    `Bot started. Please open: Bot started. Please open: mex://navigate/integrations/portal/TELEGRAM?serviceId=${ctx.chat.id}`
-  )
-)
+console.log('Bot Started!')
+
+bot.start(async (ctx) => {
+  {
+    ctx.reply(
+      `Bot started. Please open: Bot started. Please open: mex://navigate/integrations/portal/TELEGRAM?serviceId=${ctx.chat.id}`
+    )
+  }
+})
 
 bot.on('message', async (ctx) => {
   //@ts-ignore

@@ -10,7 +10,8 @@ const serverlessConfig: Partial<Serverless> = {
   },
   custom: {
     'serverless-offline': {
-      noPrependStageInUrl: true
+      ignoreJWTSignature: true,
+      noAuth: true
     },
     enabled: {
       dev: true,
@@ -22,7 +23,7 @@ const serverlessConfig: Partial<Serverless> = {
       packager: 'yarn'
     },
     dynamodb: {
-      stages: ['local'],
+      stages: ['local', 'test'],
       dbPath: '/dbMocks',
       start: {
         port: 8000,
@@ -57,7 +58,7 @@ const serverlessConfig: Partial<Serverless> = {
   provider: {
     name: 'aws',
     runtime: 'nodejs12.x',
-    memorySize: 512,
+    memorySize: 256,
     logRetentionInDays: 7,
     stage: 'dev',
     region: 'us-east-1',
@@ -102,13 +103,12 @@ const serverlessConfig: Partial<Serverless> = {
     httpApi: {
       cors: true,
       //@ts-ignore
-      // disableDefaultEndpoint: true,
+      disableDefaultEndpoint: true,
       authorizers: {
         workduckAuthorizer: {
           identitySource: '$request.header.Authorization',
           issuerUrl:
             'https://cognito-idp.' + '${opt:region, self:provider.region}' + '.amazonaws.com/' + 'us-east-1_Zu7FAh7hj',
-
           audience: ['6pvqt64p0l2kqkk2qafgdh13qe']
         }
       }
@@ -120,7 +120,7 @@ const serverlessConfig: Partial<Serverless> = {
       events: [
         {
           httpApi: {
-            path: '/telegram/{proxy+}',
+            path: '/telegram',
             method: 'ANY'
           }
         }
