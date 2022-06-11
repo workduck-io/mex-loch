@@ -21,6 +21,8 @@ const getSlug = (text: string, charLength = NODE_PATH_CHAR_LENGTH, wordLength = 
     .join(NODE_PATH_SPACER)
     .slice(0, charLength)
 
+const generateBlockId = () => `TEMP_${nanoid()}`
+
 export const lambdaAppendTemplate = (config: { nodeId: string; mexId: string; message: string; idToken: string }) => {
   const { nodeId, mexId, message, idToken } = config
   return {
@@ -43,11 +45,25 @@ export const lambdaAppendTemplate = (config: { nodeId: string; mexId: string; me
         type: 'ElementRequest',
         elements: [
           {
-            id: `TEMP_${nanoid()}`,
-            elementType: 'paragraph',
-            lastEditedBy: 'Mex-Loch',
-            content: message,
-            children: []
+            id: generateBlockId(),
+            content: '',
+            children: [
+              {
+                id: generateBlockId(),
+                content: message,
+                children: null,
+                elementType: 'p',
+                properties: null,
+                elementMetadata: null,
+                createdBy: null,
+                lastEditedBy: null,
+                createdAt: null,
+                updatedAt: null
+              }
+            ],
+            elementType: 'p',
+            properties: null,
+            elementMetadata: null
           }
         ]
       })
@@ -86,11 +102,25 @@ export const lambdaCreateTemplate = (config: {
         referenceID: parentNodeId,
         data: [
           {
-            id: `TEMP_${nanoid()}`,
-            elementType: 'paragraph',
-            lastEditedBy: 'Mex-Loch',
-            content: message,
-            children: []
+            id: generateBlockId(),
+            content: '',
+            children: [
+              {
+                id: generateBlockId(),
+                content: message,
+                children: null,
+                elementType: 'p',
+                properties: null,
+                elementMetadata: null,
+                createdBy: null,
+                lastEditedBy: null,
+                createdAt: null,
+                updatedAt: null
+              }
+            ],
+            elementType: 'p',
+            properties: null,
+            elementMetadata: null
           }
         ]
       })
