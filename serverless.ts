@@ -134,6 +134,12 @@ const serverlessConfig: Partial<Serverless> = {
             path: '/slack/events',
             method: 'POST'
           }
+        },
+        {
+          httpApi: {
+            path: '/slack/install',
+            method: 'GET'
+          }
         }
       ]
     },

@@ -2,8 +2,8 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { nanoid } from 'nanoid'
 import Lambda from '../libs/lambda'
+import { lambdaAppendTemplate, lambdaCreateTemplate } from '../libs/template'
 import { getCreds } from '../libs/tokenHandler'
-import { lambdaAppendTemplate, lambdaCreateTemplate } from '../libs/utils'
 import { messageEntity } from './entities'
 import { LastMessage } from './interface'
 export class LastMessageDAO {
