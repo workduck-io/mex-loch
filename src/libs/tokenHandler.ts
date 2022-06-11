@@ -7,8 +7,8 @@ export interface PublicAccessCreds {
   expiry?: number
 }
 
-const REFRESH_TOKEN = process.env.SERVICE_REFRESH_TOKEN
-const CLIENT_ID = process.env.SERVICE_CLIENT_ID
+const REFRESH_TOKEN = process.env.MEX_SERVICE_REFRESH_TOKEN
+const CLIENT_ID = process.env.MEX_SERVICE_CLIENT_ID
 
 export const initialPublicCreds = (): PublicAccessCreds => {
   return { refreshToken: REFRESH_TOKEN }

@@ -1,4 +1,6 @@
 import { App, AwsLambdaReceiver } from '@slack/bolt'
+import { FileInstallationStore } from '@slack/oauth'
+import * as Slack from '../src/libs/slack'
 import { messageService } from '../src/service/message.service'
 // Initialize your custom receiver
 const awsLambdaReceiver = new AwsLambdaReceiver({
@@ -8,12 +10,23 @@ const awsLambdaReceiver = new AwsLambdaReceiver({
 // Initializes your app with your bot token and the AWS Lambda ready receiver
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
+  clientId: process.env.SLACK_CLIENT_ID,
+  clientSecret: process.env.SLACK_CLIENT_SECRET,
+  stateSecret: 'top-secret',
+  scopes: ['channels:history', 'chat:write', 'commands', 'im:history'],
+  installationStore: new FileInstallationStore(),
   receiver: awsLambdaReceiver
 
   // processBeforeResponse: true
 })
 
 app.message(async ({ event, message, say }) => {
+  console.log(event)
+  //@ts-ignore
+  if (event.bot_id) {
+    return
+  }
   if (message.channel_type !== 'im') return
   const replyMessage = await messageService.handleMessage(
     //@ts-ignore
@@ -24,6 +37,7 @@ app.message(async ({ event, message, say }) => {
   if (replyMessage) {
     await say(replyMessage)
   }
+  return
 })
 
 app.command('/start', async ({ payload, command, ack, respond }) => {
@@ -35,6 +49,10 @@ app.command('/start', async ({ payload, command, ack, respond }) => {
 })
 
 export const handler = async (event, context, callback) => {
+  if (event.rawPath === '/slack/install') {
+    await Slack.auth(event)
+  }
+
   const handler = await awsLambdaReceiver.start()
   return handler(event, context, callback)
 }
