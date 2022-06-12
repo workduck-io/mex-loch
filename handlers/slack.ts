@@ -57,7 +57,6 @@ const receiver = new ExpressReceiver({
         // single team app installation lookup
 
         const res = await database.get(installQuery.teamId)
-        console.log('fetchInstallation', res)
         return res
       }
       throw new Error('Failed fetching installation')
@@ -84,8 +83,6 @@ const app = new App({
 })
 
 app.message(async ({ event, message, say }) => {
-  console.log('Received message', message)
-
   //@ts-ignore
   if (event.bot_id) {
     return
@@ -100,7 +97,6 @@ app.message(async ({ event, message, say }) => {
   if (replyMessage) {
     try {
       await say(replyMessage)
-      console.log('Sending reply message: ', replyMessage)
     } catch (e) {
       console.error(e?.data)
     }
