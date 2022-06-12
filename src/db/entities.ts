@@ -16,3 +16,13 @@ export const messageEntity = new Entity<LastMessage>({
   },
   table: lochTable
 })
+
+export const slackAuthEntity = new Entity<any>({
+  name: 'slackAuth',
+  timestamps: false,
+  attributes: {
+    serviceId: { partitionKey: true },
+    data: { type: 'map', required: true }
+  },
+  table: lochTable
+})

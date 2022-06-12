@@ -11,13 +11,15 @@ export class LastMessageDAO {
 
   async init(serviceId: string) {
     try {
-      this.record = (await messageEntity.get({ serviceId })).Item
+      //@ts-ignore
+      this.record = (await messageEntity.get({ pk: serviceId }))?.Item
       if (!this.record) {
         this.record = {}
       }
+      console.log('Last message: ', this.record)
     } catch (err) {
-      this.record = {}
       console.error(err)
+      this.record = {}
     }
   }
 
