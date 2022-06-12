@@ -5,6 +5,7 @@ class MessageService {
     const lastMessage = new LastMessageDAO()
     await lastMessage.init(serviceId)
     if (!lastMessage.getNodeId()) return 'This chat is not connected to Mex. Use /start command'
+    console.log('Got NodeId:', lastMessage.getNodeId())
 
     const time = lastMessage.getLastRecordTime()
     if (time + 5 * 60 * 1000 <= Date.now()) {

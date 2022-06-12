@@ -1,28 +1,91 @@
-import { App, AwsLambdaReceiver } from '@slack/bolt'
-import { FileInstallationStore } from '@slack/oauth'
-import * as Slack from '../src/libs/slack'
+import { App, ExpressReceiver, LogLevel } from '@slack/bolt'
+import makeHandler from 'lambda-request-handler'
+import { database } from '../src/db/slackAuth'
 import { messageService } from '../src/service/message.service'
-// Initialize your custom receiver
-const awsLambdaReceiver = new AwsLambdaReceiver({
-  signingSecret: process.env.SLACK_SIGNING_SECRET
-})
 
-// Initializes your app with your bot token and the AWS Lambda ready receiver
-const app = new App({
-  token: process.env.SLACK_BOT_TOKEN,
+// Create an ExpressReceiver
+const receiver = new ExpressReceiver({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   clientId: process.env.SLACK_CLIENT_ID,
   clientSecret: process.env.SLACK_CLIENT_SECRET,
-  stateSecret: 'top-secret',
-  scopes: ['channels:history', 'chat:write', 'commands', 'im:history'],
-  installationStore: new FileInstallationStore(),
-  receiver: awsLambdaReceiver
+  stateSecret: 'workduck',
+  processBeforeResponse: true,
+  scopes: [
+    'app_mentions:read',
+    'channels:history',
+    'channels:read',
+    'chat:write',
+    'chat:write.customize',
+    'commands',
+    'conversations.connect:write',
+    'groups:history',
+    'groups:read',
+    'im:history',
+    'im:write',
+    'mpim:history',
+    'mpim:write',
+    'reactions:read'
+  ],
+  redirectUri: `${process.env.REDIRECT_HOST}/slack/oauth_redirect`,
 
-  // processBeforeResponse: true
+  installerOptions: {
+    redirectUriPath: '/slack/oauth_redirect', // and here!
+    userScopes: ['chat:write', 'reactions:read'],
+    // This flag is available in @slack/bolt v3.7 or higher
+    directInstall: true
+  },
+  installationStore: {
+    storeInstallation: async (installation) => {
+      // change the line below so it saves to your database
+      if (installation.isEnterpriseInstall && installation.enterprise !== undefined) {
+        // support for org wide app installation
+        return await database.set(installation.enterprise.id, installation)
+      }
+      if (installation.team !== undefined) {
+        // single team app installation
+        return await database.set(installation.team.id, installation)
+      }
+      throw new Error('Failed saving installation data to installationStore')
+    },
+    fetchInstallation: async (installQuery) => {
+      // change the line below so it fetches from your database
+      if (installQuery.isEnterpriseInstall && installQuery.enterpriseId !== undefined) {
+        // org wide app installation lookup
+        return await database.get(installQuery.enterpriseId)
+      }
+      if (installQuery.teamId !== undefined) {
+        // single team app installation lookup
+
+        const res = await database.get(installQuery.teamId)
+        console.log('fetchInstallation', res)
+        return res
+      }
+      throw new Error('Failed fetching installation')
+    },
+    deleteInstallation: async (installQuery) => {
+      // change the line below so it deletes from your database
+      if (installQuery.isEnterpriseInstall && installQuery.enterpriseId !== undefined) {
+        // org wide app installation deletion
+        return await database.delete(installQuery.enterpriseId)
+      }
+      if (installQuery.teamId !== undefined) {
+        // single team app installation deletion
+        return await database.delete(installQuery.teamId)
+      }
+      throw new Error('Failed to delete installation')
+    }
+  }
+})
+
+// Create the Bolt App, using the receiver
+const app = new App({
+  receiver,
+  logLevel: LogLevel.ERROR // set loglevel at the App level
 })
 
 app.message(async ({ event, message, say }) => {
-  console.log(event)
+  console.log('Received message', message)
+
   //@ts-ignore
   if (event.bot_id) {
     return
@@ -35,24 +98,21 @@ app.message(async ({ event, message, say }) => {
     'SLACK'
   )
   if (replyMessage) {
-    await say(replyMessage)
+    try {
+      await say(replyMessage)
+      console.log('Sending reply message: ', replyMessage)
+    } catch (e) {
+      console.error(e?.data)
+    }
   }
   return
 })
 
-app.command('/start', async ({ payload, command, ack, respond }) => {
-  ack()
-
-  if (command.channel_type !== 'im') respond('This command can only be used in a direct message')
-
-  respond(`Bot started. Please open: mex://navigate/integrations/portal/SLACK?serviceId=${payload.channel_id}`)
+app.command('/start', async ({ payload, say, ack, respond }) => {
+  await ack()
+  if (payload.channel_name !== 'directmessage') await respond('This command can only be used in a direct message')
+  else
+    await respond(`Bot started. Please open: mex://navigate/integrations/portal/SLACK?serviceId=${payload.channel_id}`)
 })
 
-export const handler = async (event, context, callback) => {
-  if (event.rawPath === '/slack/install') {
-    await Slack.auth(event)
-  }
-
-  const handler = await awsLambdaReceiver.start()
-  return handler(event, context, callback)
-}
+export const handler = makeHandler(receiver.app)
