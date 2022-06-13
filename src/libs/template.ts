@@ -1,4 +1,5 @@
-import { nanoid } from 'nanoid'
+import { customAlphabet } from 'nanoid'
+import { nolookalikes } from 'nanoid-dictionary'
 
 const NODE_PATH_SPACER = ' '
 const NODE_PATH_WORD_LENGTH = 5
@@ -18,8 +19,9 @@ const getSlug = (text: string, charLength = NODE_PATH_CHAR_LENGTH, wordLength = 
     // Join
     .join(NODE_PATH_SPACER)
     .slice(0, charLength)
-const generateBlockId = () => `TEMP_${nanoid()}`
+const generateBlockId = () => `TEMP_${randomId()}`
 
+export const randomId = customAlphabet(nolookalikes)
 export const lambdaAppendTemplate = (config: { nodeId: string; mexId: string; message: string; idToken: string }) => {
   const { nodeId, mexId, message, idToken } = config
   return {

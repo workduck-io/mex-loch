@@ -1,8 +1,7 @@
 // Importing node.js file system module
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
-import { nanoid } from 'nanoid'
 import Lambda from '../libs/lambda'
-import { lambdaAppendTemplate, lambdaCreateTemplate } from '../libs/template'
+import { lambdaAppendTemplate, lambdaCreateTemplate, randomId } from '../libs/template'
 import { getCreds } from '../libs/tokenHandler'
 import { messageEntity } from './entities'
 import { LastMessage } from './interface'
@@ -29,7 +28,7 @@ export class LastMessageDAO {
 
   // Logic to add data
   async createNewNode(attributes: Partial<LastMessage>, message: string) {
-    const newNodeId = `NODE_${nanoid()}`
+    const newNodeId = `NODE_${randomId()}`
 
     await Lambda.invokeMexNode(
       lambdaCreateTemplate({
