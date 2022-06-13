@@ -69,7 +69,7 @@ export async function allConfig(event: APIGatewayProxyEventV2): Promise<APIGatew
         name: 'Slack',
         connected: false,
         authConfig: {
-          authURL: 'https://workduck-workspace.slack.com/apps/A02MND2HFK9-mex-slack'
+          authURL: 'https://http-test.workduck.io/slack/install'
         },
         icon: 'logos:slack-icon'
       }
