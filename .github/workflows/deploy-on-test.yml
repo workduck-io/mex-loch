@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - main
-      - mukul-wd-1352-task-github-actions-for-automated
 
 jobs:
   build:
