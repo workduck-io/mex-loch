@@ -17,14 +17,17 @@ export const registerUser = async (payload: Partial<LastMessage>) => {
 
 export const updateUser = async (payload: Partial<LastMessage>) => {
   return (
-    (await messageEntity.put(payload, {
-      conditions: [
-        {
-          attr: 'serviceId',
-          exists: true
-        }
-      ]
-    })) as DocumentClient.UpdateItemOutput
+    (await messageEntity.put(
+      { ...payload, sessionStartTime: 0 }, //reset session on config change
+      {
+        conditions: [
+          {
+            attr: 'serviceId',
+            exists: true
+          }
+        ]
+      }
+    )) as DocumentClient.UpdateItemOutput
   ).Attributes
 }
 
