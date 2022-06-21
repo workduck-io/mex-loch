@@ -19,7 +19,7 @@ const getSlug = (text: string, charLength = NODE_PATH_CHAR_LENGTH, wordLength = 
     // Join
     .join(NODE_PATH_SPACER)
     .slice(0, charLength)
-const generateBlockId = () => `TEMP_${randomId()}`
+const generateBlockId = () => `TEMP_${randomId(5)}`
 
 export const randomId = customAlphabet(nolookalikes)
 export const lambdaAppendTemplate = (config: { mexId: string; message: string; idToken: string }) => {
