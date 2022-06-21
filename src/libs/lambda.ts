@@ -16,13 +16,17 @@ export default {
   //   return mexNodeLambda.invoke({ ...params, Payload: JSON.stringify(params.Payload) }).promise()
   // },
   createNodeRequest: async (headers: { [key: string]: string }, data: any) => {
-    // const url = 'ip-172-31-33-159.ec2.internal/node'
+    const strData = JSON.stringify(data)
     return new Promise((resolve) => {
       let req = https.request({
         hostname: process.env.MEXIT_MIDDLEWARE_IP,
         port: 443,
         path: '/api/v1/node',
-        method: 'POST'
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': strData.length
+        }
       })
       Object.entries(headers).forEach(([key, value]) => {
         req.setHeader(key, value)
@@ -34,17 +38,22 @@ export default {
     })
   },
   appendNodeRequest: async (nodeId: string, headers: { [key: string]: string }, data: any) => {
+    const strData = JSON.stringify(data)
     return new Promise((resolve) => {
       let req = https.request({
         hostname: process.env.MEXIT_MIDDLEWARE_IP,
         port: 443,
         path: `/api/v1/node/${nodeId}`,
-        method: 'PUT'
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': strData.length
+        }
       })
       Object.entries(headers).forEach(([key, value]) => {
         req.setHeader(key, value)
       })
-      req.write(JSON.stringify(data))
+      req.write(strData)
       req.end(null, null, () => {
         resolve(req)
       })

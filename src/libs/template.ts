@@ -71,7 +71,6 @@ export const lambdaCreateTemplate = (config: {
       'mex-workspace-id': mexId
     },
     body: {
-      type: 'NodeRequest',
       title: getSlug(message),
       id: nodeId,
       referenceID: parentNodeId,
