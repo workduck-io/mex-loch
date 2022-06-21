@@ -3,7 +3,7 @@ import { getConnectedServices, registerUser, updateUser } from '../src/db/regist
 import { getWorkspaceId } from '../src/libs/utils'
 export async function handler(event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> {
   const workspaceId = getWorkspaceId(event)
-  const body = JSON.parse(event.body)
+  const body = JSON.parse(event.body!)
   try {
     await registerUser({ ...body, mexId: workspaceId })
     return {
@@ -20,7 +20,7 @@ export async function handler(event: APIGatewayProxyEventV2): Promise<APIGateway
 
 export async function update(event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> {
   const workspaceId = getWorkspaceId(event)
-  const body = JSON.parse(event.body)
+  const body = JSON.parse(event.body!)
   try {
     await updateUser({ ...body, mexId: workspaceId })
     return {
