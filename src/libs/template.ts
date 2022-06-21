@@ -22,52 +22,38 @@ const getSlug = (text: string, charLength = NODE_PATH_CHAR_LENGTH, wordLength = 
 const generateBlockId = () => `TEMP_${randomId()}`
 
 export const randomId = customAlphabet(nolookalikes)
-export const lambdaAppendTemplate = (config: { nodeId: string; mexId: string; message: string; idToken: string }) => {
-  const { nodeId, mexId, message, idToken } = config
+export const lambdaAppendTemplate = (config: { mexId: string; message: string; idToken: string }) => {
+  const { mexId, message, idToken } = config
   return {
-    FunctionName: `mex-backend-${process.env.SLS_STAGE ?? 'local'}-Node`,
-    Payload: {
-      headers: {
-        authorization: idToken,
-        'mex-workspace-id': mexId
-      },
-      version: '2.0',
-      rawPath: '/node/{id}/append',
-      rawQueryString: '',
-      routeKey: 'POST /node/{id}/append',
-      isBase64Encoded: false,
-      pathParameters: { id: nodeId },
-      queryStringParameters: null,
-      stageVariables: null,
-      requestContext: null,
-      body: JSON.stringify({
-        type: 'ElementRequest',
-        elements: [
-          {
-            id: generateBlockId(),
-            content: '',
-            children: [
-              {
-                id: generateBlockId(),
-                content: message,
-                children: null,
-                elementType: 'p',
-                properties: null,
-                elementMetadata: null,
-                createdBy: null,
-                lastEditedBy: null,
-                createdAt: null,
-                updatedAt: null
-              }
-            ],
-            elementType: 'p',
-            properties: null,
-            elementMetadata: null
-          }
-        ]
-      })
+    headers: {
+      authorization: idToken,
+      'mex-workspace-id': mexId
     },
-    InvocationType: 'Event'
+    body: {
+      elements: [
+        {
+          id: generateBlockId(),
+          content: '',
+          children: [
+            {
+              id: generateBlockId(),
+              content: message,
+              children: null,
+              elementType: 'p',
+              properties: null,
+              elementMetadata: null,
+              createdBy: null,
+              lastEditedBy: null,
+              createdAt: null,
+              updatedAt: null
+            }
+          ],
+          elementType: 'p',
+          properties: null,
+          elementMetadata: null
+        }
+      ]
+    }
   }
 }
 
@@ -80,50 +66,38 @@ export const lambdaCreateTemplate = (config: {
 }) => {
   const { nodeId, mexId, message, idToken, parentNodeId } = config
   return {
-    FunctionName: `mex-backend-${process.env.SLS_STAGE ?? 'local'}-Node`,
-    Payload: {
-      headers: {
-        authorization: idToken,
-        'mex-workspace-id': mexId
-      },
-      version: '2.0',
-      rawPath: '/node',
-      rawQueryString: '',
-      routeKey: 'POST /node',
-      isBase64Encoded: false,
-      queryStringParameters: null,
-      stageVariables: null,
-      requestContext: null,
-      body: JSON.stringify({
-        type: 'NodeRequest',
-        title: getSlug(message),
-        id: nodeId,
-        referenceID: parentNodeId,
-        data: [
-          {
-            id: generateBlockId(),
-            content: '',
-            children: [
-              {
-                id: generateBlockId(),
-                content: message,
-                children: null,
-                elementType: 'p',
-                properties: null,
-                elementMetadata: null,
-                createdBy: null,
-                lastEditedBy: null,
-                createdAt: null,
-                updatedAt: null
-              }
-            ],
-            elementType: 'p',
-            properties: null,
-            elementMetadata: null
-          }
-        ]
-      })
+    headers: {
+      authorization: idToken,
+      'mex-workspace-id': mexId
     },
-    InvocationType: 'Event'
+    body: {
+      type: 'NodeRequest',
+      title: getSlug(message),
+      id: nodeId,
+      referenceID: parentNodeId,
+      data: [
+        {
+          id: generateBlockId(),
+          content: '',
+          children: [
+            {
+              id: generateBlockId(),
+              content: message,
+              children: null,
+              elementType: 'p',
+              properties: null,
+              elementMetadata: null,
+              createdBy: null,
+              lastEditedBy: null,
+              createdAt: null,
+              updatedAt: null
+            }
+          ],
+          elementType: 'p',
+          properties: null,
+          elementMetadata: null
+        }
+      ]
+    }
   }
 }

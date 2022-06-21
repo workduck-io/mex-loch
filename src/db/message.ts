@@ -29,16 +29,14 @@ export class LastMessageDAO {
   // Logic to add data
   async createNewNode(attributes: Partial<LastMessage>, message: string) {
     const newNodeId = `NODE_${randomId()}`
-
-    await Lambda.invokeMexNode(
-      lambdaCreateTemplate({
-        mexId: attributes.mexId,
-        nodeId: newNodeId,
-        parentNodeId: attributes.parentNodeId,
-        message: message,
-        idToken: (await getCreds()).idToken
-      })
-    )
+    const { headers, body } = lambdaCreateTemplate({
+      mexId: attributes.mexId,
+      nodeId: newNodeId,
+      parentNodeId: attributes.parentNodeId,
+      message: message,
+      idToken: (await getCreds()).idToken
+    })
+    await Lambda.createNodeRequest(headers, body)
     return (
       (await messageEntity.update(
         { ...attributes, nodeId: newNodeId },
@@ -54,14 +52,12 @@ export class LastMessageDAO {
   }
 
   async appendToNode(attributes: Partial<LastMessage>, message: string) {
-    await Lambda.invokeMexNode(
-      lambdaAppendTemplate({
-        nodeId: attributes.nodeId,
-        mexId: attributes.mexId,
-        message: message,
-        idToken: (await getCreds()).idToken
-      })
-    )
+    const { headers, body } = lambdaAppendTemplate({
+      mexId: attributes.mexId,
+      message: message,
+      idToken: (await getCreds()).idToken
+    })
+    await Lambda.appendNodeRequest(attributes.nodeId, headers, body)
 
     await messageEntity.update(attributes, {
       conditions: {
