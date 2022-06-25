@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - main
-      - autodeploy-fuckups
 
 jobs:
   build:
@@ -20,12 +19,13 @@ jobs:
       MEX_SERVICE_REFRESH_TOKEN: ${{ secrets.MEX_SERVICE_REFRESH_TOKEN }}
       MEX_SERVICE_CLIENT_ID: ${{ secrets.MEX_SERVICE_CLIENT_ID }}
       REDIRECT_HOST: ${{ secrets.REDIRECT_HOST }}
+      MEXIT_MIDDLEWARE_IP: ${{ secrets.MEXIT_MIDDLEWARE_IP }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           always-auth: true
-          node-version: "16.x"
+          node-version: '16.x'
       - run: npm install -g yarn
       - name: Create .env file
         run: |
@@ -39,5 +39,6 @@ jobs:
           echo MEX_SERVICE_REFRESH_TOKEN=${{ secrets.MEX_SERVICE_REFRESH_TOKEN }} >> .env
           echo MEX_SERVICE_CLIENT_ID=${{ secrets.MEX_SERVICE_CLIENT_ID }} >> .env
           echo REDIRECT_HOST=${{ secrets.REDIRECT_HOST }} >> .env
+          echo MEXIT_MIDDLEWARE_IP=${{ secrets.MEXIT_MIDDLEWARE_IP }} >> .env
       - run: yarn --no-default-rc
       - run: yarn sls deploy --stage=test
