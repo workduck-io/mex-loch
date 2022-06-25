@@ -5,7 +5,7 @@ import { messageService } from '../src/service/message.service'
 
 // Create an ExpressReceiver
 const receiver = new ExpressReceiver({
-  signingSecret: process.env.SLACK_SIGNING_SECRET,
+  signingSecret: process.env.SLACK_SIGNING_SECRET!,
   clientId: process.env.SLACK_CLIENT_ID,
   clientSecret: process.env.SLACK_CLIENT_SECRET,
   stateSecret: 'workduck',
@@ -107,8 +107,7 @@ app.message(async ({ event, message, say }) => {
 app.command('/start', async ({ payload, say, ack, respond }) => {
   await ack()
   if (payload.channel_name !== 'directmessage') await respond('This command can only be used in a direct message')
-  else
-    await respond(`Bot started. Please open: mex://navigate/integrations/portal/SLACK?serviceId=${payload.channel_id}`)
+  else await respond(`Bot started. Please open: https://mexit.workduck.io/OAuth/Slack?serviceId=${payload.channel_id}`)
 })
 
 export const handler = makeHandler(receiver.app)

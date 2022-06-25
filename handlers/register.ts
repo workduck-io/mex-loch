@@ -58,6 +58,9 @@ export async function allConfig(event: APIGatewayProxyEventV2): Promise<APIGatew
       TELEGRAM: {
         actionGroupId: 'TELEGRAM',
         name: 'Telegram',
+        description: `
+Integrate Mex with your Telegram and say hello to your new friend Mex Telegram Bot! It's an excellent secret keeper. Will store all your captured insights, random ideas, to-dos....from telegram in here :shushing_face:
+You can select which note you would like your telegram messages to be stored in below!`,
         authConfig: {
           authURL: 'https://t.me/Mex_Offical_Bot'
         },
@@ -69,7 +72,7 @@ export async function allConfig(event: APIGatewayProxyEventV2): Promise<APIGatew
         name: 'Slack',
         connected: false,
         authConfig: {
-          authURL: 'https://http-test.workduck.io/slack/install'
+          authURL: 'https://http-test.workduck.io/loch/slack/install'
         },
         icon: 'logos:slack-icon'
       }
