@@ -1,5 +1,6 @@
 name: Deploy to Stage Test on Branch Main
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
