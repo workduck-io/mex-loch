@@ -4,7 +4,8 @@
   "main": "handler.js",
   "scripts": {
     "local": "serverless offline start --stage local",
-    "dev": "serverless offline start --stage test"
+    "dev": "serverless offline start --stage test",
+    "swagger": "sls generate-swagger"
   },
   "author": "",
   "license": "MIT",
@@ -13,6 +14,7 @@
     "@types/jest": "^26.0.14",
     "@types/nanoid-dictionary": "^4.2.0",
     "@types/serverless": "^3.12.7",
+    "@workduck-io/serverless-auto-swagger": "^2.8.3",
     "esbuild": "^0.14.41",
     "serverless": "^3.18.2",
     "serverless-domain-manager": "^6.0.3",
