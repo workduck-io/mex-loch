@@ -22,6 +22,12 @@ const serverlessConfig: Partial<Serverless> = {
     esbuild: {
       packager: 'yarn'
     },
+    autoswagger: {
+      typefiles: ['./src/db/interface.ts'],
+      useStage: false,
+      deploySwagger: false,
+      swaggerPath: 'swagger'
+    },
     dynamodb: {
       stages: ['local', 'test'],
       dbPath: '/dbMocks',
@@ -48,6 +54,7 @@ const serverlessConfig: Partial<Serverless> = {
     }
   },
   plugins: [
+    '@workduck-io/serverless-auto-swagger',
     'serverless-esbuild',
     'serverless-dynamodb-local',
     'serverless-offline',
