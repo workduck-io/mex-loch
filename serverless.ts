@@ -26,7 +26,8 @@ const serverlessConfig: Partial<Serverless> = {
       typefiles: ['./src/db/interface.ts'],
       useStage: false,
       deploySwagger: false,
-      swaggerPath: 'swagger'
+      swaggerPath: 'swagger',
+      apiKeyHeaders: ['Authorization', 'mex-workspace-id', 'wd-request-id']
     },
     dynamodb: {
       stages: ['local', 'test'],
@@ -108,7 +109,20 @@ const serverlessConfig: Partial<Serverless> = {
       }
     },
     httpApi: {
-      cors: true,
+      cors: {
+        allowedOrigins: ['*'],
+        allowedHeaders: [
+          'Content-Type',
+          'X-Amz-Date',
+          'Authorization',
+          'X-Api-Key',
+          'X-Amz-Security-Token',
+          'X-Amz-User-Agent',
+          'X-Amzn-Trace-Id',
+          'mex-workspace-id',
+          'wd-request-id'
+        ]
+      },
       //@ts-ignore
       disableDefaultEndpoint: true,
       authorizers: {
