@@ -22,8 +22,13 @@ bot.start(async (ctx) => {
 })
 
 bot.on('message', async (ctx) => {
-  //@ts-ignore
-  const replyMessage = await messageService.handleMessage(ctx.message.text, ctx.chat.id, 'TELEGRAM')
+  const replyMessage = await messageService.handleMessage({
+    //@ts-ignore
+    message: ctx.message.text,
+    serviceId: ctx.chat.id.toString(),
+    sourceUrl: `https://t.me/c/${ctx.chat.id}/${ctx.message.message_id}`,
+    serviceType: 'TELEGRAM'
+  })
   if (replyMessage) {
     await ctx.reply(replyMessage)
   }

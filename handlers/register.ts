@@ -70,7 +70,7 @@ You can select which note you would like your Telegram messages to be stored in 
       SLACK: {
         actionGroupId: 'SLACK',
         name: 'Slack',
-        description: `Integrate Mex with your Salck and say hello to your new friend Mex Slack Bot! It's an excellent secret keeper. Will store all your captured insights, random ideas, to-dos....from Slack in here.
+        description: `Integrate Mex with your Slack and say hello to your new friend Mex Slack Bot! It's an excellent secret keeper. Will store all your captured insights, random ideas, to-dos....from Slack in here.
         You can select which note you would like your Slack messages to be stored in below!`,
         connected: false,
         authConfig: {

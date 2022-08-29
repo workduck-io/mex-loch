@@ -22,8 +22,8 @@ const getSlug = (text: string, charLength = NODE_PATH_CHAR_LENGTH, wordLength = 
 const generateBlockId = () => `TEMP_${randomId(5)}`
 
 export const randomId = customAlphabet(nolookalikes)
-export const lambdaAppendTemplate = (config: { mexId: string; message: string; idToken: string }) => {
-  const { mexId, message, idToken } = config
+export const lambdaAppendTemplate = (config: { mexId: string; message: string; idToken: string; source?: string }) => {
+  const { mexId, message, idToken, source } = config
   return {
     headers: {
       authorization: idToken,
@@ -49,7 +49,14 @@ export const lambdaAppendTemplate = (config: { mexId: string; message: string; i
             }
           ],
           elementType: 'p',
-          properties: null,
+          properties: source
+            ? {
+                blockMeta: {
+                  source: source,
+                  origin: source
+                }
+              }
+            : null,
           elementMetadata: null
         }
       ]
@@ -63,8 +70,9 @@ export const lambdaCreateTemplate = (config: {
   mexId: string
   message: string
   idToken: string
+  source?: string
 }) => {
-  const { nodeId, mexId, message, idToken, parentNodeId } = config
+  const { nodeId, mexId, message, idToken, parentNodeId, source } = config
   return {
     headers: {
       authorization: idToken,
@@ -93,7 +101,14 @@ export const lambdaCreateTemplate = (config: {
             }
           ],
           elementType: 'p',
-          properties: null,
+          properties: source
+            ? {
+                blockMeta: {
+                  source: source,
+                  origin: source
+                }
+              }
+            : null,
           elementMetadata: null
         }
       ]
