@@ -88,12 +88,14 @@ app.message(async ({ event, message, say }) => {
     return
   }
   if (message.channel_type !== 'im') return
-  const replyMessage = await messageService.handleMessage(
+  const replyMessage = await messageService.handleMessage({
     //@ts-ignore
-    !message.text ? message.attachments[0]?.text : message.text,
-    message.channel,
-    'SLACK'
-  )
+    message: !message.text ? message.attachments[0]?.text : message.text,
+    //@ts-ignore
+    sourceUrl: `slack://user?team=${event.team_id}&id=${message.user}`,
+    serviceId: message.channel,
+    serviceType: 'SLACK'
+  })
   if (replyMessage) {
     try {
       await say(replyMessage)

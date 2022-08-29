@@ -27,14 +27,15 @@ export class LastMessageDAO {
   }
 
   // Logic to add data
-  async createNewNode(attributes: Partial<LastMessage>, message: string) {
+  async createNewNode(attributes: Partial<LastMessage>, message: string, source?: string) {
     const newNodeId = `NODE_${randomId()}`
     const { headers, body } = lambdaCreateTemplate({
       mexId: attributes.mexId,
       nodeId: newNodeId,
       parentNodeId: attributes.parentNodeId,
       message: message,
-      idToken: (await getCreds()).idToken
+      idToken: (await getCreds()).idToken,
+      source
     })
     await Lambda.createNodeRequest(headers, body)
     return (
@@ -51,10 +52,11 @@ export class LastMessageDAO {
     ).Attributes
   }
 
-  async appendToNode(attributes: Partial<LastMessage>, message: string) {
+  async appendToNode(attributes: Partial<LastMessage>, message: string, source?: string) {
     const { headers, body } = lambdaAppendTemplate({
       mexId: attributes.mexId,
       message: message,
+      source,
       idToken: (await getCreds()).idToken
     })
     await Lambda.appendNodeRequest(attributes.nodeId, headers, body)

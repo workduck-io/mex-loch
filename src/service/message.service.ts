@@ -1,7 +1,13 @@
 import { LastMessageDAO } from '../db/message'
 
 class MessageService {
-  async handleMessage(message: string, serviceId: string, serviceType: string) {
+  async handleMessage(messageParameters: {
+    message: string
+    serviceId: string
+    sourceUrl?: string
+    serviceType: string
+  }) {
+    const { message, serviceId, serviceType, sourceUrl } = messageParameters
     const lastMessage = new LastMessageDAO()
     await lastMessage.init(serviceId)
     if (!lastMessage.getNodeId()) return 'This chat is not connected to Mex. Use /start command'
@@ -17,7 +23,8 @@ class MessageService {
             mexId: lastMessage.getMexId(),
             sessionStartTime: Date.now()
           },
-          message
+          message,
+          sourceUrl
         )
         console.log(`New node created: ${node.nodeId}`)
         return 'New Note Created'
@@ -36,7 +43,8 @@ class MessageService {
             mexId: lastMessage.getMexId(),
             sessionStartTime: Date.now()
           },
-          message
+          message,
+          sourceUrl
         )
       } catch (err) {
         console.error(err)
