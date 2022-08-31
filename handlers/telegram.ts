@@ -26,7 +26,7 @@ bot.on('message', async (ctx) => {
     //@ts-ignore
     message: ctx.message.text,
     serviceId: ctx.chat.id.toString(),
-    sourceUrl: `https://t.me/c/${ctx.chat.id}/${ctx.message.message_id}`,
+    sourceUrl: `https://t.me/Mex_Offical_Bot/${ctx.message.message_id}`,
     serviceType: 'TELEGRAM'
   })
   if (replyMessage) {
