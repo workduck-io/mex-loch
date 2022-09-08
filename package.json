@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@slack/bolt": "^3.11.1",
+    "@workduck-io/mex-default-user-token": "^0.0.1",
     "dynamodb-toolbox": "^0.3.5",
     "got": "11.8.3",
     "lambda-request-handler": "^0.5.1-alpha1",
