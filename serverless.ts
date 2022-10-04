@@ -13,6 +13,12 @@ const serverlessConfig: Partial<Serverless> = {
       ignoreJWTSignature: true,
       noAuth: true
     },
+    getTime: '${file(getTime.js)}',
+    gitCommitTracker: {
+      location: './gitReleases/mexLoch-${self:custom.getTime}.txt', // generates txt file for upload in s3
+      deployment: ['test', 'dev'], // only test and dev currently supported
+      html: true
+    },
     enabled: {
       dev: true,
       test: true,
@@ -48,6 +54,31 @@ const serverlessConfig: Partial<Serverless> = {
         apiType: 'http'
       }
     },
+    assets: {
+      auto: true,
+      targets: [
+        {
+          bucket: 'swagger-files-docs',
+          prefix: 'public/mexLoch/${opt:stage, self:provider.stage}/',
+          files: [
+            {
+              source: './swagger',
+              globs: 'swagger.js'
+            }
+          ]
+        },
+        {
+          bucket: 'git-releases-files',
+          prefix: 'public/mexLoch/${opt:stage, self:provider.stage}/',
+          files: [
+            {
+              source: './gitReleases',
+              globs: 'mexLoch-${self:custom.getTime}.txt'
+            }
+          ]
+        }
+      ]
+    },
 
     prune: {
       automatic: true,
@@ -56,12 +87,15 @@ const serverlessConfig: Partial<Serverless> = {
   },
   plugins: [
     '@workduck-io/serverless-auto-swagger',
+    '@workduck-io/serverless-slack-plugin',
+    'serverless-git-commit-tracker',
     'serverless-esbuild',
     'serverless-dynamodb-local',
     'serverless-offline',
     'serverless-dotenv-plugin',
     'serverless-domain-manager',
-    'serverless-prune-plugin'
+    'serverless-prune-plugin',
+    'serverless-s3-deploy'
   ],
   provider: {
     name: 'aws',
