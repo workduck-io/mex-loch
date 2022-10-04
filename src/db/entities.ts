@@ -12,6 +12,7 @@ export const messageEntity = new Entity<LastMessage>({
     mexId: { map: 'ak', type: 'string' },
     nodeId: { type: 'string', default: () => `NODE_${nanoid()}` },
     parentNodeId: { type: 'string' },
+    namespaceId: { type: 'string' },
     sessionStartTime: { type: 'number', default: () => 0 }
   },
   table: lochTable
