@@ -33,6 +33,7 @@ export class LastMessageDAO {
       mexId: attributes.mexId,
       nodeId: newNodeId,
       parentNodeId: attributes.parentNodeId,
+      namespaceId: attributes.namespaceId,
       message: message,
       idToken: (await getCreds()).idToken,
       source

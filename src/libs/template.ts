@@ -67,12 +67,13 @@ export const lambdaAppendTemplate = (config: { mexId: string; message: string; i
 export const lambdaCreateTemplate = (config: {
   nodeId: string
   parentNodeId: string
+  namespaceId: string
   mexId: string
   message: string
   idToken: string
   source?: string
 }) => {
-  const { nodeId, mexId, message, idToken, parentNodeId, source } = config
+  const { nodeId, mexId, message, idToken, parentNodeId, namespaceId, source } = config
   return {
     headers: {
       authorization: idToken,
@@ -81,6 +82,7 @@ export const lambdaCreateTemplate = (config: {
     body: {
       title: getSlug(message),
       id: nodeId,
+      namespaceID: namespaceId,
       referenceID: parentNodeId,
       data: [
         {

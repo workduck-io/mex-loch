@@ -4,5 +4,6 @@ export interface LastMessage {
   mexId: string
   nodeId: string
   parentNodeId: string
+  namespaceId: string
   sessionStartTime: number
 }
