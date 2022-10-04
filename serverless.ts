@@ -54,6 +54,15 @@ const serverlessConfig: Partial<Serverless> = {
         apiType: 'http'
       }
     },
+    slackBot: {
+      token: '${env:SLACK_RELEASE_TRACKER__BOT_TOKEN}',
+      channel: 'C042RL00W48', // All message will be sent to this channel (# service-releases)
+      endpoints: true, // All endpoint deployments and removals will result in a message
+      functions: {
+        deployed: true, // Function deployments will result in a message
+        removed: true // Function removals will result in a message
+      }
+    },
     assets: {
       auto: true,
       targets: [
