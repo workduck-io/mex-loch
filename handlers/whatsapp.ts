@@ -75,7 +75,7 @@ app.post('/whatsapp', async (req, res) => {
             request.json = {
               messaging_product: 'whatsapp',
               to: from,
-              text: { body: 'Ack: ' + msg_body }
+              text: { body: `${replyMessage}`}
             }
             request.headers = {
               'Content-Type': 'application/json'
