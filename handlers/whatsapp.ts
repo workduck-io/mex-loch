@@ -67,7 +67,7 @@ app.post('/whatsapp', async (req, res) => {
         try {
           const replyMessage = await messageService.handleMessage({
             message: msg_body,
-            serviceId: from,
+            serviceId: phone_number_id,
             sourceUrl: `https://wa.me/${process.env.WHATSAPP_BOT_NUMBER}?text=${message.messages[0].id}}`,
             serviceType: 'WHATSAPP'
           })
