@@ -18,6 +18,7 @@ jobs:
       SLACK_CLIENT_ID: ${{ secrets.SLACK_CLIENT_ID }}
       SLACK_SIGNING_SECRET: ${{ secrets.SLACK_SIGNING_SECRET }}
       SLACK_CLIENT_SECRET: ${{ secrets.SLACK_CLIENT_SECRET }}
+      WHATSAPP_BOT_TOKEN: ${{ secrets.WHATSAPP_BOT_TOKEN }}
       MEX_DEFAULT_USER_REFRESH_TOKEN: ${{ secrets.MEX_DEFAULT_USER_REFRESH_TOKEN }}
       MEX_SERVICE_CLIENT_ID: ${{ secrets.MEX_SERVICE_CLIENT_ID }}
       REDIRECT_HOST: ${{ secrets.REDIRECT_HOST }}
@@ -27,9 +28,9 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           always-auth: true
-          node-version: "16.x"
-          registry-url: "https://npm.pkg.github.com"
-          scope: "@workduck-io"
+          node-version: '16.x'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@workduck-io'
       - run: npm install -g yarn
       - name: Create .env file
         run: |
@@ -41,6 +42,7 @@ jobs:
           echo SLACK_CLIENT_ID=${{ secrets.SLACK_CLIENT_ID }} >> .env
           echo SLACK_SIGNING_SECRET=${{ secrets.SLACK_SIGNING_SECRET }} >> .env
           echo SLACK_CLIENT_SECRET=${{ secrets.SLACK_CLIENT_SECRET }} >> .env
+          echo WHATSAPP_BOT_TOKEN=${{ secrets.WHATSAPP_BOT_TOKEN }} >> .env
           echo MEX_DEFAULT_USER_REFRESH_TOKEN=${{ secrets.MEX_DEFAULT_USER_REFRESH_TOKEN }} >> .env
           echo MEX_SERVICE_CLIENT_ID=${{ secrets.MEX_SERVICE_CLIENT_ID }} >> .env
           echo REDIRECT_HOST=${{ secrets.REDIRECT_HOST }} >> .env

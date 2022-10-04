@@ -181,6 +181,17 @@ const serverlessConfig: Partial<Serverless> = {
     }
   },
   functions: {
+    whatsapp: {
+      handler: 'handlers/whatsapp.handler',
+      events: [
+        {
+          httpApi: {
+            path: '/whatsapp',
+            method: 'ANY'
+          }
+        }
+      ]
+    },
     telegram: {
       handler: 'handlers/telegram.handler',
       events: [
