@@ -21,7 +21,8 @@ class MessageService {
             serviceType,
             parentNodeId: lastMessage.getParentNodeId(),
             mexId: lastMessage.getMexId(),
-            sessionStartTime: Date.now()
+            sessionStartTime: Date.now(),
+            namespaceId: lastMessage.getNamespaceID()
           },
           message,
           sourceUrl
@@ -41,7 +42,7 @@ class MessageService {
             serviceType,
             nodeId: lastMessage.getNodeId(),
             mexId: lastMessage.getMexId(),
-            sessionStartTime: Date.now()
+            sessionStartTime: Date.now(),
           },
           message,
           sourceUrl
