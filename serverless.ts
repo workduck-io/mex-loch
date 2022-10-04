@@ -3,6 +3,7 @@ import Table from './infra/table'
 
 const serverlessConfig: Partial<Serverless> = {
   service: 'mex-loch',
+  useDotenv: true,
   frameworkVersion: '3',
   package: {
     individually: true,
@@ -12,6 +13,12 @@ const serverlessConfig: Partial<Serverless> = {
     'serverless-offline': {
       ignoreJWTSignature: true,
       noAuth: true
+    },
+    getTime: '${file(getTime.js)}',
+    gitCommitTracker: {
+      location: './gitReleases/mexLoch-${self:custom.getTime}.txt', // generates txt file for upload in s3
+      deployment: ['test', 'dev'], // only test and dev currently supported
+      html: true
     },
     enabled: {
       dev: true,
@@ -48,6 +55,40 @@ const serverlessConfig: Partial<Serverless> = {
         apiType: 'http'
       }
     },
+    slackBot: {
+      token: '${env:SLACK_RELEASE_TRACKER_BOT_TOKEN}',
+      channel: 'C042RL00W48', // All message will be sent to this channel (# service-releases)
+      endpoints: true, // All endpoint deployments and removals will result in a message
+      functions: {
+        deployed: true, // Function deployments will result in a message
+        removed: true // Function removals will result in a message
+      }
+    },
+    assets: {
+      auto: true,
+      targets: [
+        {
+          bucket: 'swagger-files-docs',
+          prefix: 'public/mexLoch/${opt:stage, self:provider.stage}/',
+          files: [
+            {
+              source: './swagger',
+              globs: 'swagger.js'
+            }
+          ]
+        },
+        {
+          bucket: 'git-releases-files',
+          prefix: 'public/mexLoch/${opt:stage, self:provider.stage}/',
+          files: [
+            {
+              source: './gitReleases',
+              globs: 'mexLoch-${self:custom.getTime}.txt'
+            }
+          ]
+        }
+      ]
+    },
 
     prune: {
       automatic: true,
@@ -56,12 +97,15 @@ const serverlessConfig: Partial<Serverless> = {
   },
   plugins: [
     '@workduck-io/serverless-auto-swagger',
+    '@workduck-io/serverless-slack-plugin',
+    'serverless-git-commit-tracker',
     'serverless-esbuild',
     'serverless-dynamodb-local',
     'serverless-offline',
     'serverless-dotenv-plugin',
     'serverless-domain-manager',
-    'serverless-prune-plugin'
+    'serverless-prune-plugin',
+    'serverless-s3-deploy'
   ],
   provider: {
     name: 'aws',
@@ -72,7 +116,8 @@ const serverlessConfig: Partial<Serverless> = {
     region: 'us-east-1',
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
-      SLS_STAGE: '${self:custom.stage}'
+      SLS_STAGE: '${self:custom.stage}',
+      SLACK_RELEASE_TRACKER_BOT_TOKEN: '${env:SLACK_RELEASE_TRACKER_BOT_TOKEN}'
     },
     iam: {
       role: {

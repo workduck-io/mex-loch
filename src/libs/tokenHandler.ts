@@ -1,6 +1,6 @@
 import { DefaultAccessCreds } from '@workduck-io/mex-default-user-token'
 
-const REFRESH_TOKEN = process.env.MEX_SERVICE_REFRESH_TOKEN
+const REFRESH_TOKEN = process.env.MEX_DEFAULT_USER_REFRESH_TOKEN
 const CLIENT_ID = process.env.MEX_SERVICE_CLIENT_ID
 
 const initialPublicCreds = () => {

@@ -22,8 +22,8 @@ const getSlug = (text: string, charLength = NODE_PATH_CHAR_LENGTH, wordLength = 
 const generateBlockId = () => `TEMP_${randomId(5)}`
 
 export const randomId = customAlphabet(nolookalikes)
-export const lambdaAppendTemplate = (config: { mexId: string; message: string; idToken: string; source?: string }) => {
-  const { mexId, message, idToken, source } = config
+export const lambdaAppendTemplate = (config: { mexId: string; message: string; idToken: string; source?: string}) => {
+  const { mexId, message, idToken, source} = config
   return {
     headers: {
       authorization: idToken,

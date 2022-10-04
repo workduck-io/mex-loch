@@ -93,4 +93,10 @@ export class LastMessageDAO {
       return this.record.parentNodeId
     }
   }
+
+  getNamespaceID() {
+    if (Object.keys(this.record).length > 0)  {
+      return this.record.namespaceId
+    }
+  }
 }
