@@ -20,6 +20,7 @@ jobs:
       SLACK_CLIENT_SECRET: ${{ secrets.SLACK_CLIENT_SECRET }}
       WHATSAPP_BOT_TOKEN: ${{ secrets.WHATSAPP_BOT_TOKEN }}
       WHATSAPP_VERIFY_TOKEN: ${{ secrets.WHATSAPP_VERIFY_TOKEN }}
+      WHATSAPP_BOT_NUMBER: ${{ secrets.WHATSAPP_BOT_NUMBER }}
       MEX_DEFAULT_USER_REFRESH_TOKEN: ${{ secrets.MEX_DEFAULT_USER_REFRESH_TOKEN }}
       MEX_SERVICE_CLIENT_ID: ${{ secrets.MEX_SERVICE_CLIENT_ID }}
       REDIRECT_HOST: ${{ secrets.REDIRECT_HOST }}
@@ -44,6 +45,8 @@ jobs:
           echo SLACK_SIGNING_SECRET=${{ secrets.SLACK_SIGNING_SECRET }} >> .env
           echo SLACK_CLIENT_SECRET=${{ secrets.SLACK_CLIENT_SECRET }} >> .env
           echo WHATSAPP_BOT_TOKEN=${{ secrets.WHATSAPP_BOT_TOKEN }} >> .env
+          echo WHATSAPP_VERIFY_TOKEN=${{ secrets.WHATSAPP_VERIFY_TOKEN }} >> .env
+          echo WHATSAPP_BOT_NUMBER=${{ secrets.WHATSAPP_BOT_NUMBER }} >> .env
           echo MEX_SERVICE_REFRESH_TOKEN=${{ secrets.MEX_SERVICE_REFRESH_TOKEN }} >> .env
           echo MEX_SERVICE_CLIENT_ID=${{ secrets.MEX_SERVICE_CLIENT_ID }} >> .env
           echo REDIRECT_HOST=${{ secrets.REDIRECT_HOST }} >> .env
