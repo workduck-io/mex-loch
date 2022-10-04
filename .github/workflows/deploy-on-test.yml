@@ -13,7 +13,7 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-      SLACK_RELEASE_TRACKER__BOT_TOKEN: ${{ secrets.SLACK_RELEASE_TRACKER__BOT_TOKEN }}
+      SLACK_RELEASE_TRACKER_BOT_TOKEN: ${{ secrets.SLACK_RELEASE_TRACKER_BOT_TOKEN }}
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       SLACK_CLIENT_ID: ${{ secrets.SLACK_CLIENT_ID }}
       SLACK_SIGNING_SECRET: ${{ secrets.SLACK_SIGNING_SECRET }}
@@ -36,7 +36,7 @@ jobs:
           touch .env
           echo YARN_TOKEN=${{ secrets.YARN_TOKEN }} >> .env
           echo BOT_TOKEN=${{ secrets.BOT_TOKEN }} >> .env
-          echo SLACK_RELEASE_TRACKER__BOT_TOKEN=${{ secrets.SLACK_RELEASE_TRACKER__BOT_TOKEN }} >> .env
+          echo SLACK_RELEASE_TRACKER_BOT_TOKEN=${{ secrets.SLACK_RELEASE_TRACKER_BOT_TOKEN }} >> .env
           echo SLACK_BOT_TOKEN=${{ secrets.SLACK_BOT_TOKEN }} >> .env
           echo SLACK_CLIENT_ID=${{ secrets.SLACK_CLIENT_ID }} >> .env
           echo SLACK_SIGNING_SECRET=${{ secrets.SLACK_SIGNING_SECRET }} >> .env
@@ -46,4 +46,6 @@ jobs:
           echo REDIRECT_HOST=${{ secrets.REDIRECT_HOST }} >> .env
           echo MEXIT_MIDDLEWARE_IP=${{ secrets.MEXIT_MIDDLEWARE_IP }} >> .env
       - run: yarn
+      - name: Create gitReleases Folder
+        run: mkdir gitReleases
       - run: yarn sls deploy --stage=test

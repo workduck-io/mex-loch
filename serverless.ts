@@ -3,6 +3,7 @@ import Table from './infra/table'
 
 const serverlessConfig: Partial<Serverless> = {
   service: 'mex-loch',
+  useDotenv: true,
   frameworkVersion: '3',
   package: {
     individually: true,
@@ -55,7 +56,7 @@ const serverlessConfig: Partial<Serverless> = {
       }
     },
     slackBot: {
-      token: '${env:SLACK_RELEASE_TRACKER__BOT_TOKEN}',
+      token: '${env:SLACK_RELEASE_TRACKER_BOT_TOKEN}',
       channel: 'C042RL00W48', // All message will be sent to this channel (# service-releases)
       endpoints: true, // All endpoint deployments and removals will result in a message
       functions: {
@@ -115,7 +116,8 @@ const serverlessConfig: Partial<Serverless> = {
     region: 'us-east-1',
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
-      SLS_STAGE: '${self:custom.stage}'
+      SLS_STAGE: '${self:custom.stage}',
+      SLACK_RELEASE_TRACKER_BOT_TOKEN: '${env:SLACK_RELEASE_TRACKER_BOT_TOKEN}'
     },
     iam: {
       role: {
