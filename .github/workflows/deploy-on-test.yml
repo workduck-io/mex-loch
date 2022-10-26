@@ -14,6 +14,7 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
       SLACK_RELEASE_TRACKER_BOT_TOKEN: ${{ secrets.SLACK_RELEASE_TRACKER_BOT_TOKEN }}
+      GH_BOT_TOKEN: ${{ secrets.GH_BOT_TOKEN }}
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       SLACK_CLIENT_ID: ${{ secrets.SLACK_CLIENT_ID }}
       SLACK_SIGNING_SECRET: ${{ secrets.SLACK_SIGNING_SECRET }}
@@ -40,6 +41,7 @@ jobs:
           echo YARN_TOKEN=${{ secrets.YARN_TOKEN }} >> .env
           echo BOT_TOKEN=${{ secrets.BOT_TOKEN }} >> .env
           echo SLACK_RELEASE_TRACKER_BOT_TOKEN=${{ secrets.SLACK_RELEASE_TRACKER_BOT_TOKEN }} >> .env
+          echo GH_BOT_TOKEN=${{ secrets.GH_BOT_TOKEN }} >> .env
           echo SLACK_BOT_TOKEN=${{ secrets.SLACK_BOT_TOKEN }} >> .env
           echo SLACK_CLIENT_ID=${{ secrets.SLACK_CLIENT_ID }} >> .env
           echo SLACK_SIGNING_SECRET=${{ secrets.SLACK_SIGNING_SECRET }} >> .env
