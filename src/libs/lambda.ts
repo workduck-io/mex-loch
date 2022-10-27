@@ -44,7 +44,7 @@ export default {
         hostname: process.env.MEXIT_MIDDLEWARE_IP,
         port: 443,
         path: `/api/v1/node/${nodeId}`,
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           'Content-Length': strData.length

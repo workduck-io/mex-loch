@@ -118,7 +118,8 @@ const serverlessConfig: Partial<Serverless> = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       SLS_STAGE: '${self:custom.stage}',
-      SLACK_RELEASE_TRACKER_BOT_TOKEN: '${env:SLACK_RELEASE_TRACKER_BOT_TOKEN}'
+      SLACK_RELEASE_TRACKER_BOT_TOKEN: '${env:SLACK_RELEASE_TRACKER_BOT_TOKEN}',
+      GH_BOT_TOKEN: '${env:GH_BOT_TOKEN}'
     },
     iam: {
       role: {
