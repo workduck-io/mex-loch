@@ -56,6 +56,7 @@ export class LastMessageDAO {
   async appendToNode(attributes: Partial<LastMessage>, message: string, source?: string) {
     const { headers, body } = lambdaAppendTemplate({
       mexId: attributes.mexId,
+      nodeId: attributes.nodeId,
       message: message,
       source,
       idToken: (await getCreds()).idToken
@@ -95,7 +96,7 @@ export class LastMessageDAO {
   }
 
   getNamespaceID() {
-    if (Object.keys(this.record).length > 0)  {
+    if (Object.keys(this.record).length > 0) {
       return this.record.namespaceId
     }
   }
