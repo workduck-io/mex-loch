@@ -1,13 +1,23 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda'
-import { getConnectedServices, registerUser, updateUser } from '../src/db/register'
+import { getConnectedServices, getUser, registerUser, updateUser } from '../src/db/register'
 import { getWorkspaceId } from '../src/libs/utils'
+
 export async function handler(event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> {
   const workspaceId = getWorkspaceId(event)
   const body = JSON.parse(event.body!)
   try {
-    await registerUser({ ...body, mexId: workspaceId })
-    return {
-      statusCode: 204
+    // Get user already registered
+    const user = await getUser({ ...body, workspaceId })
+    if (user) {
+      return {
+        statusCode: 400,
+        body: 'This service is already registered'
+      }
+    } else {
+      await registerUser({ ...body, mexId: workspaceId })
+      return {
+        statusCode: 204
+      }
     }
   } catch (err) {
     console.error(err)
@@ -21,10 +31,27 @@ export async function handler(event: APIGatewayProxyEventV2): Promise<APIGateway
 export async function update(event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> {
   const workspaceId = getWorkspaceId(event)
   const body = JSON.parse(event.body!)
+
+  // Get user already registered
+  const user = await getUser({ ...body, workspaceId })
   try {
-    await updateUser({ ...body, mexId: workspaceId })
-    return {
-      statusCode: 204
+    if (user) {
+      if (workspaceId === user.mexId) {
+        await updateUser({ ...body, mexId: workspaceId })
+        return {
+          statusCode: 204
+        }
+      } else {
+        return {
+          statusCode: 400,
+          body: 'This service is already registered'
+        }
+      }
+    } else {
+      return {
+        statusCode: 400,
+        body: 'This service is not registered'
+      }
     }
   } catch (err) {
     console.error(err)
