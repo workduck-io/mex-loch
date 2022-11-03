@@ -17,11 +17,12 @@ const serverlessConfig: Partial<Serverless> = {
     getTime: '${file(getTime.js)}',
     gitCommitTracker: {
       location: './gitReleases/mexLoch-${self:custom.getTime}.txt', // generates txt file for upload in s3
-      deployment: ['test', 'dev'], // only test and dev currently supported
+      deployment: ['prod', 'staging', 'test'], // Currently, we support all 3 stages
       html: true
     },
     enabled: {
-      dev: true,
+      prod: true,
+      staging: true,
       test: true,
       other: false
     },
@@ -37,7 +38,7 @@ const serverlessConfig: Partial<Serverless> = {
       apiKeyHeaders: ['Authorization', 'mex-workspace-id', 'wd-request-id']
     },
     dynamodb: {
-      stages: ['local', 'test'],
+      stages: ['staging', 'test', 'prod', 'local'],
       dbPath: '/dbMocks',
       start: {
         port: 8000,
@@ -45,9 +46,14 @@ const serverlessConfig: Partial<Serverless> = {
         noStart: true
       }
     },
+    domainMaps: {
+      prod: 'http.workduck.io',
+      staging: 'http-staging.workduck.io',
+      test: 'http-test.workduck.io'
+    },
     customDomain: {
       http: {
-        domainName: 'http-${opt:stage, self:provider.stage}.workduck.io',
+        domainName: '${self:custom.domainMaps.${opt:stage, self:provider.stage}}',
         basePath: 'loch',
         createRoute53Record: true,
         endpointType: 'regional',
@@ -113,7 +119,7 @@ const serverlessConfig: Partial<Serverless> = {
     runtime: 'nodejs12.x',
     memorySize: 256,
     logRetentionInDays: 7,
-    stage: 'dev',
+    stage: 'staging',
     region: 'us-east-1',
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
@@ -183,17 +189,17 @@ const serverlessConfig: Partial<Serverless> = {
     }
   },
   functions: {
-    whatsapp: {
-      handler: 'handlers/whatsapp.handler',
-      events: [
-        {
-          httpApi: {
-            path: '/whatsapp',
-            method: 'ANY'
-          }
-        }
-      ]
-    },
+    // whatsapp: {
+    //   handler: 'handlers/whatsapp.handler',
+    //   events: [
+    //     {
+    //       httpApi: {
+    //         path: '/whatsapp',
+    //         method: 'ANY'
+    //       }
+    //     }
+    //   ]
+    // },
     telegram: {
       handler: 'handlers/telegram.handler',
       events: [
