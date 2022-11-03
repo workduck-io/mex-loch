@@ -56,4 +56,4 @@ jobs:
       - run: yarn
       - name: Create gitReleases Folder
         run: mkdir gitReleases
-      - run: yarn sls deploy --stage=test
+      - run: yarn sls deploy --stage=staging
