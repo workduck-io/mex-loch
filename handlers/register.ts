@@ -82,17 +82,17 @@ export async function connected(event: APIGatewayProxyEventV2): Promise<APIGatew
 export async function allConfig(event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> {
   try {
     const allServicesConfig = {
-      WHATSAPP: {
-        actionGroupId: 'WHATSAPP',
-        name: 'WhatsApp',
-        description: `WhatsApp is a free, cross-platform messaging and Voice over IP (VoIP) service owned by Facebook, Inc. It allows users to send text messages and voice messages, make voice and video calls, and share images, documents, user locations, and other media.
-        You can select which note you would like your Whatsapp messages to be stored in below!`,
-        authConfig: {
-          authURL: `https://wa.me/${process.env.WHATSAPP_BOT_NUMBER}?text=/start`
-        },
-        connected: false,
-        icon: 'logos:whatsapp-icon'
-      },
+      // WHATSAPP: {
+      //   actionGroupId: 'WHATSAPP',
+      //   name: 'WhatsApp',
+      //   description: `WhatsApp is a free, cross-platform messaging and Voice over IP (VoIP) service owned by Facebook, Inc. It allows users to send text messages and voice messages, make voice and video calls, and share images, documents, user locations, and other media.
+      //   You can select which note you would like your Whatsapp messages to be stored in below!`,
+      //   authConfig: {
+      //     authURL: `https://wa.me/${process.env.WHATSAPP_BOT_NUMBER}?text=/start`
+      //   },
+      //   connected: false,
+      //   icon: 'logos:whatsapp-icon'
+      // },
       TELEGRAM: {
         actionGroupId: 'TELEGRAM',
         name: 'Telegram',
