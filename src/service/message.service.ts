@@ -47,6 +47,7 @@ class MessageService {
           message,
           sourceUrl
         )
+        return 'Appended to existing note'
       } catch (err) {
         console.error(err)
         return 'Problem creating new note. Please try again!'

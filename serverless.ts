@@ -97,13 +97,13 @@ const serverlessConfig: Partial<Serverless> = {
     }
   },
   plugins: [
+    'serverless-dotenv-plugin',
     '@workduck-io/serverless-auto-swagger',
     '@workduck-io/serverless-slack-plugin',
     'serverless-git-commit-tracker',
     'serverless-esbuild',
     'serverless-dynamodb-local',
     'serverless-offline',
-    'serverless-dotenv-plugin',
     'serverless-domain-manager',
     'serverless-prune-plugin',
     'serverless-s3-deploy'
