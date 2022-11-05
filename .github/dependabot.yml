@@ -1,0 +1,22 @@
+# Please see the documentation for all configuration options:
+# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+updates:
+  - package-ecosystem: "npm" # See documentation for possible values
+    directory: "/" # Location of package manifests
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Asia/Kolkata"
+    allow:
+      # Allow updates for @workduck-io/serverless-slack-plugin
+      - dependency-name: "@workduck-io/serverless-slack-plugin"
+        dependency-type: "direct"
+    registries:
+      npm-github:
+        type: npm-registry
+        token: ${{secrets.YARN_TOKEN}}
+     reviewers:
+      - "vivekrj0"
+
