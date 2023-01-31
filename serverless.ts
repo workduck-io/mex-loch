@@ -61,6 +61,19 @@ const serverlessConfig: Partial<Serverless> = {
         apiType: 'http'
       }
     },
+    cognitoPoolMaps: {
+      dev: 'us-east-1_Zu7FAh7hj',
+      staging: 'us-east-1_Zu7FAh7hj',
+      test: 'us-east-1_O5YTlVrCd',
+      local: 'us-east-1_Zu7FAh7hj'
+    },
+    cognitoClientIDMaps: {
+      dev: '6pvqt64p0l2kqkk2qafgdh13qe',
+      staging: '6pvqt64p0l2kqkk2qafgdh13qe',
+      test: '25qd6eq6vv3906osgv8v3f8c6v',
+      local: '6pvqt64p0l2kqkk2qafgdh13qe'
+    },
+
     slackBot: {
       token: '${env:SLACK_RELEASE_TRACKER_BOT_TOKEN}',
       ghToken: '${env:GH_BOT_TOKEN}',
@@ -125,7 +138,8 @@ const serverlessConfig: Partial<Serverless> = {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       SLS_STAGE: '${self:custom.stage}',
       SLACK_RELEASE_TRACKER_BOT_TOKEN: '${env:SLACK_RELEASE_TRACKER_BOT_TOKEN}',
-      GH_BOT_TOKEN: '${env:GH_BOT_TOKEN}'
+      GH_BOT_TOKEN: '${env:GH_BOT_TOKEN}',
+      MEXIT_SERVICE_CLIENT_ID: '${self:custom.cognitoClientIDMaps.${opt:stage, self:provider.stage}}'
     },
     iam: {
       role: {
@@ -182,8 +196,11 @@ const serverlessConfig: Partial<Serverless> = {
         workduckAuthorizer: {
           identitySource: '$request.header.Authorization',
           issuerUrl:
-            'https://cognito-idp.' + '${opt:region, self:provider.region}' + '.amazonaws.com/' + 'us-east-1_Zu7FAh7hj',
-          audience: ['6pvqt64p0l2kqkk2qafgdh13qe']
+            'https://cognito-idp.' +
+            '${aws:region}' +
+            '.amazonaws.com/' +
+            '${self:custom.cognitoPoolMaps.${opt:stage, self:provider.stage}}',
+          audience: ['${self:custom.cognitoClientIDMaps.${opt:stage, self:provider.stage}}']
         }
       }
     }
