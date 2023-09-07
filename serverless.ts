@@ -129,7 +129,7 @@ const serverlessConfig: Partial<Serverless> = {
   ],
   provider: {
     name: 'aws',
-    runtime: 'nodejs12.x',
+    runtime: 'nodejs18.x',
     memorySize: 256,
     logRetentionInDays: 7,
     stage: 'staging',
